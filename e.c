@@ -1,0 +1,60 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define MAX_NUMEROS 100
+#define MAX_LONGITUD 20
+
+void convertirNumero(char *numero, char *nuevoNumero) {
+    strcpy(nuevoNumero, "(");
+
+    char codigoPais[3];
+    strncpy(codigoPais, numero, 2);
+    codigoPais[2] = '\0';
+
+    strcat(nuevoNumero, codigoPais);
+    strcat(nuevoNumero, ")-");
+
+    strncat(nuevoNumero, numero + 2, 1);
+    strcat(nuevoNumero, "-");
+    strcat(nuevoNumero, numero + 3);
+}
+
+int main() {
+    char numeros[MAX_NUMEROS][MAX_LONGITUD];
+    int numNumeros;
+
+    printf("Cuantos numeros telefonicos ingresaras?: ");
+    scanf("%d", &numNumeros);
+
+    printf("Ingrese los numeros telefonicos:\n");
+    for (int i = 0; i < numNumeros; i++) {
+        printf("Numero %d: ", i + 1);
+        scanf("%s", numeros[i]);
+    }
+
+    FILE *archivo = fopen("resultado.txt", "w");
+    if (archivo == NULL) {
+        printf("No se pudo abrir el archivo.\n");
+        return 1;
+    }
+
+    fprintf(archivo, "Numeros telefonicos:\n\n");
+
+    for (int i = 0; i < numNumeros; i++) {
+        char nuevoNumero[MAX_LONGITUD];
+        convertirNumero(numeros[i], nuevoNumero);
+
+        printf("Numero telefonico: %s\n", numeros[i]);
+        printf("Nueva cadena: %s\n\n", nuevoNumero);
+
+        fprintf(archivo, "Numero telefonico: %s\n", numeros[i]);
+        fprintf(archivo, "Nueva cadena: %s\n\n", nuevoNumero);
+    }
+
+    fclose(archivo);
+
+    printf("Los resultados se han guardado en el archivo 'resultado.txt'.\n");
+
+    return 0;
+}
